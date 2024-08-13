@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="template1">
+<head>
+    <meta charset="UTF-8">
+    <title>Final Exam</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="/webjars/bootstrap/5.1.3/css/bootstrap.min.css">
+    <style>
+        /*.pre-scrollable{*/
+        /*    height:1000px;*/
+        /*    overflow-y:scroll;*/
+        /*}*/
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1>Seat Reservation System</h1>
+    <div class="container mt-2 pre-scrollable">
+
+        <div class="card-body">
+            <table class="table">
+            <thead>
+            <tr>
+                <th>A</th><th>B</th><th>C</th><th>D</th><th>E</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${seat1A}">1A</td>
+                <td th:text="${seat1B}">1B</td>
+                <td th:text="${seat1C}">1C</td>
+                <td th:text="${seat1D}">1D</td>
+                <td th:text="${seat1E}">1E</td>
+            </tr>
+            <tr>
+                <td th:text="${seat2A}">2A</td>
+                <td th:text="${seat2B}">2B</td>
+                <td th:text="${seat2C}">2C</td>
+                <td th:text="${seat2D}">2D</td>
+                <td th:text="${seat2E}">2E</td>
+            </tr>
+            <tr>
+                <td th:text="${seat3A}">3A</td>
+                <td th:text="${seat3B}">3B</td>
+                <td th:text="${seat3C}">3C</td>
+                <td th:text="${seat3D}">3D</td>
+                <td th:text="${seat3E}">3E</td>
+            </tr>
+            <tr>
+                <td th:text="${seat4A}">4A</td>
+                <td th:text="${seat4B}">4B</td>
+                <td th:text="${seat4C}">4C</td>
+                <td th:text="${seat4D}">4D</td>
+                <td th:text="${seat4E}">4E</td>
+            </tr>
+            </tbody>
+            </table>
+        </div>
+        <h1 th:text="'There are ' + ${numSeat} + ' remaining seats.'"></h1>
+        <div class="card-body">
+            <form method="post" th:action="@{add}">
+                <div>
+                    <label>Seat Code</label>
+                    <input class="form-control" type="text" name="seat" th:value="${customer.seat}">
+                    <span th:errors="${customer.seat}"></span>
+                </div>
+                <div>
+                    <label>Customer Name</label>
+                    <input class="form-control" type="text" name="name" th:value="${customer.name}">
+                    <span th:errors="${customer.name}"></span>
+                </div>
+                <div>
+                    <label>Date</label>
+                    <input id="dateInput" class="form-control" type="date" name="date" th:value="${customer.date}">
+                    <span th:errors="${customer.date}"></span>
+                </div>
+                <br>
+                <button type="submit" class="btn-primary" th:href="@{/index}" >Reserve</button>
+            </form>
+            <hr>
+            <div th:if="${err}">
+                <h1 th:text="${err}" style="color: red;"></h1>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Transaction Code</th><th>Date</th><th>Seat Number</th><th>Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="p:${listCustomers}">
+                    <td th:text="${p.getId()}"></td>
+                    <td th:text="${p.getDate()}"></td>
+                    <td th:text="${p.getSeat()}"></td>
+                    <td th:text="${p.getName()}"></td>
+                    <td>
+                        <a class="btn btn-danger" onClick="return confirm('Do you want to delete the data?')" th:href="@{delete(id=${p.id})}">Delete</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-success" th:href="@{editCustomers(id=${p.id})}">Edit</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+<script th:inline="javascript">
+    var u = [[${session.a}]];
+    if(u===1){
+        alert('One record added');
+    }
+</script>
+<script th:inline="javascript">
+    var u = [[${session.e}]];
+    if(u===2){
+        alert('One record edited');
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById('dateInput').value = today;
+    });
+</script>
+</html>
